@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Right or Wrong?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true"></div>
+
+    <main class="app">
+      <header class="top-bar">
+        <p class="brand">
+          <a class="home-link" href="../../">Games</a>
+          <span class="brand-sep" aria-hidden="true">·</span>
+          Right or Wrong?
+        </p>
+        <p class="score" id="scoreDisplay" hidden>
+          Correct: <span id="scoreValue">0</span> /
+          <span id="scoreTotal">0</span>
+        </p>
+      </header>
+
+      <section class="screen" id="categoryScreen">
+        <h1 class="title">Pick a category</h1>
+        <p class="subtitle">Then decide if the name matches the picture.</p>
+        <div class="category-list" id="categoryList"></div>
+      </section>
+
+      <section class="screen" id="playScreen" hidden>
+        <div class="card">
+          <div class="item-stage">
+            <img
+              id="itemImage"
+              class="item-image"
+              alt=""
+              width="240"
+              height="240"
+            />
+          </div>
+          <p class="prompt">Is this a…</p>
+          <p class="guess-name" id="guessName"></p>
+          <p class="feedback" id="feedback" aria-live="polite"></p>
+          <div class="actions">
+            <button type="button" class="btn btn-right" id="rightBtn">
+              Right
+            </button>
+            <button type="button" class="btn btn-wrong" id="wrongBtn">
+              Wrong
+            </button>
+          </div>
+          <p class="progress" id="progressText"></p>
+        </div>
+      </section>
+
+      <section class="screen" id="resultsScreen" hidden>
+        <h1 class="title">All done!</h1>
+        <p class="final-score" id="finalScore"></p>
+        <p class="subtitle" id="finalMessage"></p>
+        <button type="button" class="btn btn-primary" id="playAgainBtn">
+          Play Again
+        </button>
+        <button type="button" class="btn btn-secondary" id="changeCategoryBtn">
+          Change Category
+        </button>
+      </section>
+    </main>
+
+    <script src="../../shared/js/categories.js"></script>
+    <script src="js/game.js"></script>
+  </body>
+</html>
