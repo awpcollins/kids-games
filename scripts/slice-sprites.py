@@ -1,53 +1,90 @@
 #!/usr/bin/env python3
-"""Slice the transparent animals sprite sheet into individual PNG files.
+"""Slice a transparent sprite sheet into individual PNG files.
 
-Uses alpha to isolate each animal: nominal 6x4 grid, then keep the largest
-opaque blob whose center lies in that cell (so feet from the row above are
-dropped). No black color-keying — outlines stay intact.
+Uses alpha to isolate each item: nominal grid, then keep the largest opaque
+blob whose center lies in that cell. No black color-keying.
 """
 
 from __future__ import annotations
 
+import argparse
 from collections import deque
 from pathlib import Path
 from typing import List, Optional, Set, Tuple
 
 from PIL import Image
 
-COLS = 6
-ROWS = 4
 ALPHA_MIN = 16
 PAD = 4
-NAMES = [
-    "lion",
-    "elephant",
-    "giraffe",
-    "zebra",
-    "tiger",
-    "bear",
-    "penguin",
-    "frog",
-    "rabbit",
-    "monkey",
-    "fox",
-    "deer",
-    "dog",
-    "cat",
-    "cow",
-    "pig",
-    "sheep",
-    "goat",
-    "chicken",
-    "duck",
-    "owl",
-    "bird",
-    "turtle",
-    "dinosaur",
-]
 
 ROOT = Path(__file__).resolve().parent.parent
-SHEET = ROOT / "assets" / "animals-sheet.png"
-OUT_DIR = ROOT / "assets" / "animals"
+
+SHEETS = {
+    "animals": {
+        "sheet": ROOT / "assets" / "animals-sheet.png",
+        "out": ROOT / "assets" / "animals",
+        "cols": 6,
+        "rows": 4,
+        "names": [
+            "lion",
+            "elephant",
+            "giraffe",
+            "zebra",
+            "tiger",
+            "bear",
+            "penguin",
+            "frog",
+            "rabbit",
+            "monkey",
+            "fox",
+            "deer",
+            "dog",
+            "cat",
+            "cow",
+            "pig",
+            "sheep",
+            "goat",
+            "chicken",
+            "duck",
+            "owl",
+            "bird",
+            "turtle",
+            "dinosaur",
+        ],
+    },
+    "food": {
+        "sheet": ROOT / "assets" / "food-sheet.png",
+        "out": ROOT / "assets" / "food",
+        "cols": 6,
+        "rows": 4,
+        "names": [
+            "apple",
+            "banana",
+            "strawberry",
+            "orange",
+            "watermelon",
+            "grapes",
+            "pizza",
+            "hamburger",
+            "hot-dog",
+            "cupcake",
+            "ice-cream",
+            "cookie",
+            "carrot",
+            "broccoli",
+            "tomato",
+            "cheese",
+            "egg",
+            "bread",
+            "milk",
+            "yogurt",
+            "cereal",
+            "donut",
+            "fries",
+            "avocado",
+        ],
+    },
+}
 
 Point = Tuple[int, int]
 Blob = Tuple[int, int, int, int, int, Set[Point]]
@@ -97,27 +134,24 @@ def find_opaque_blobs(image: Image.Image) -> List[Blob]:
     return blobs
 
 
-def pick_animal_blob(blobs: List[Blob], cell_top: int, cell_bottom: int) -> Optional[Blob]:
+def pick_blob(blobs: List[Blob], cell_top: int, cell_bottom: int) -> Optional[Blob]:
     if not blobs:
         return None
 
     mid = (cell_top + cell_bottom) / 2
-    in_row = []
-    for blob in blobs:
-        min_x, min_y, max_x, max_y, size, _points = blob
-        center_y = (min_y + max_y) / 2
-        if cell_top <= center_y < cell_bottom:
-            in_row.append(blob)
-
+    in_row = [
+        blob
+        for blob in blobs
+        if cell_top <= ((blob[1] + blob[3]) / 2) < cell_bottom
+    ]
     candidates = in_row or blobs
-    # Prefer blobs near the vertical middle of the cell.
     return max(
         candidates,
         key=lambda item: (item[4], -abs(((item[1] + item[3]) / 2) - mid)),
     )
 
 
-def extract_animal(sheet: Image.Image, blob: Blob) -> Image.Image:
+def extract_item(sheet: Image.Image, blob: Blob) -> Image.Image:
     min_x, min_y, max_x, max_y, _size, points = blob
     x0 = max(0, min_x - PAD)
     y0 = max(0, min_y - PAD)
@@ -139,48 +173,76 @@ def extract_animal(sheet: Image.Image, blob: Blob) -> Image.Image:
     return canvas
 
 
-def main() -> None:
-    if not SHEET.exists():
-        raise SystemExit(f"Missing transparent sheet: {SHEET}")
-    if len(NAMES) != COLS * ROWS:
-        raise SystemExit(f"Expected {COLS * ROWS} names, got {len(NAMES)}")
+def slice_sheet(sheet_path: Path, out_dir: Path, cols: int, rows: int, names: List[str]) -> None:
+    if not sheet_path.exists():
+        raise SystemExit(f"Missing transparent sheet: {sheet_path}")
+    if len(names) != cols * rows:
+        raise SystemExit(f"Expected {cols * rows} names, got {len(names)}")
 
-    sheet = Image.open(SHEET).convert("RGBA")
+    sheet = Image.open(sheet_path).convert("RGBA")
     width, height = sheet.size
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
-    # Work on full sheet blobs once — more accurate than per-cell crops.
     blobs = find_opaque_blobs(sheet)
-    if len(blobs) < COLS * ROWS:
-        print(f"Warning: found {len(blobs)} blobs, expected at least {COLS * ROWS}")
+    if len(blobs) < cols * rows:
+        print(f"Warning: found {len(blobs)} blobs, expected at least {cols * rows}")
 
-    for index, name in enumerate(NAMES):
-        col = index % COLS
-        row = index // COLS
-        cell_left = round(col * width / COLS)
-        cell_right = round((col + 1) * width / COLS)
-        cell_top = round(row * height / ROWS)
-        cell_bottom = round((row + 1) * height / ROWS)
+    for index, name in enumerate(names):
+        col = index % cols
+        row = index // cols
+        cell_left = round(col * width / cols)
+        cell_right = round((col + 1) * width / cols)
+        cell_top = round(row * height / rows)
+        cell_bottom = round((row + 1) * height / rows)
 
-        # Blobs whose bbox overlaps this cell, scored by center in cell.
         overlapping = []
         for blob in blobs:
-            min_x, min_y, max_x, max_y, size, points = blob
+            min_x, min_y, max_x, max_y, _size, _points = blob
             center_x = (min_x + max_x) / 2
             center_y = (min_y + max_y) / 2
             if cell_left <= center_x < cell_right and cell_top <= center_y < cell_bottom:
                 overlapping.append(blob)
 
-        chosen = pick_animal_blob(overlapping, cell_top, cell_bottom)
+        chosen = pick_blob(overlapping, cell_top, cell_bottom)
         if chosen is None:
-            raise SystemExit(f"No animal found for {name} in cell ({col},{row})")
+            raise SystemExit(f"No item found for {name} in cell ({col},{row})")
 
-        canvas = extract_animal(sheet, chosen)
-        out_path = OUT_DIR / f"{name}.png"
+        canvas = extract_item(sheet, chosen)
+        out_path = out_dir / f"{name}.png"
         canvas.save(out_path, "PNG")
         print(
             f"Wrote {out_path.relative_to(ROOT)} "
             f"pixels={chosen[4]} canvas={canvas.width}x{canvas.height}"
+        )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Slice transparent sprite sheets")
+    parser.add_argument(
+        "category",
+        nargs="?",
+        choices=sorted(SHEETS.keys()),
+        help="Built-in sheet category to slice",
+    )
+    parser.add_argument("--all", action="store_true", help="Slice every built-in sheet")
+    args = parser.parse_args()
+
+    if args.all:
+        targets = list(SHEETS.keys())
+    elif args.category:
+        targets = [args.category]
+    else:
+        parser.error("Pass a category name or --all")
+
+    for key in targets:
+        config = SHEETS[key]
+        print(f"=== {key} ===")
+        slice_sheet(
+            config["sheet"],
+            config["out"],
+            config["cols"],
+            config["rows"],
+            config["names"],
         )
 
 

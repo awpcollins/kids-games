@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true"></div>
+
+    <main class="app app-wide">
+      <header class="top-bar">
+        <p class="brand">
+          <a class="home-link" href="../../">Games</a>
+          <span class="brand-sep" aria-hidden="true">·</span>
+          Memory
+        </p>
+        <p class="score" id="movesDisplay" hidden>
+          Moves: <span id="movesValue">0</span>
+        </p>
+      </header>
+
+      <section class="screen" id="categoryScreen">
+        <h1 class="title">Pick a category</h1>
+        <p class="subtitle">
+          Flip two cards at a time. Match all the pairs to win.
+        </p>
+        <div class="category-list" id="categoryList"></div>
+      </section>
+
+      <section class="screen" id="playScreen" hidden>
+        <div class="board" id="board" aria-label="Memory cards"></div>
+      </section>
+
+      <section class="screen" id="resultsScreen" hidden>
+        <h1 class="title">You matched them all!</h1>
+        <p class="final-score" id="finalScore"></p>
+        <p class="subtitle" id="finalMessage"></p>
+        <button type="button" class="btn btn-primary" id="playAgainBtn">
+          Play Again
+        </button>
+        <button type="button" class="btn btn-secondary" id="changeCategoryBtn">
+          Change Category
+        </button>
+      </section>
+    </main>
+
+    <script src="../../shared/js/categories.js"></script>
+    <script src="js/game.js"></script>
+  </body>
+</html>
