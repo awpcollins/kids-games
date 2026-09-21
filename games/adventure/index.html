@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Castle Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true"></div>
+
+    <main class="app app-wide">
+      <header class="top-bar">
+        <p class="brand">
+          <a class="home-link" href="../../">Games</a>
+          <span class="brand-sep" aria-hidden="true">·</span>
+          Castle Quest
+        </p>
+        <p class="score" id="statsBar" hidden>
+          <span id="turnLabel">P1</span> · Stars:
+          <span id="strengthValue">2</span>
+        </p>
+      </header>
+
+      <section class="screen" id="countScreen">
+        <h1 class="title">How many players?</h1>
+        <p class="subtitle">
+          Grab stars and skills, open the castle, then battle the monster together!
+        </p>
+        <div class="count-row" id="countRow"></div>
+      </section>
+
+      <section class="screen" id="pickScreen" hidden>
+        <h1 class="title" id="pickTitle">Player 1 — pick a hero</h1>
+        <p class="subtitle">Each player needs a different animal.</p>
+        <div class="hero-grid" id="heroGrid"></div>
+        <div class="picked-row" id="pickedRow"></div>
+      </section>
+
+      <section class="screen screen-play" id="playScreen" hidden>
+        <div class="play-stage">
+          <div class="roster-row" id="rosterRow" aria-label="Players"></div>
+          <div class="board-wrap" id="boardWrap">
+            <div class="board" id="board"></div>
+          </div>
+        </div>
+
+        <div class="board-legend" aria-label="Tile key">
+          <div class="legend-item"><img src="../../assets/symbols/flag.png" alt="" /><span>Start</span></div>
+          <div class="legend-item"><img src="../../assets/symbols/star.png" alt="" /><span>Power Up</span></div>
+          <div class="legend-item"><img src="../../assets/symbols/potion.png" alt="" /><span>Skill</span></div>
+          <div class="legend-item"><img src="../../assets/symbols/paw.png" alt="" /><span>Friend</span></div>
+          <div class="legend-item"><span class="legend-q">?</span><span>Chance</span></div>
+          <div class="legend-item"><img src="../../assets/symbols/lightning.png" alt="" /><span>Oops</span></div>
+          <div class="legend-item"><img src="../../assets/symbols/moon.png" alt="" /><span>Rest</span></div>
+          <div class="legend-item"><img src="../../assets/symbols/castle.png" alt="" /><span>Castle</span></div>
+        </div>
+
+        <p class="event" id="eventText" aria-live="polite">
+          Tap the dice to begin your adventure!
+        </p>
+
+        <div class="adventure-actions">
+          <button type="button" class="dice-scene" id="rollBtn" aria-label="Roll the dice">
+            <div class="dice-cube" id="diceCube">
+              <div class="dice-face face-1">
+                <span class="pip" style="grid-area: 2 / 2"></span>
+              </div>
+              <div class="dice-face face-2">
+                <span class="pip" style="grid-area: 1 / 1"></span>
+                <span class="pip" style="grid-area: 3 / 3"></span>
+              </div>
+              <div class="dice-face face-3">
+                <span class="pip" style="grid-area: 1 / 1"></span>
+                <span class="pip" style="grid-area: 2 / 2"></span>
+                <span class="pip" style="grid-area: 3 / 3"></span>
+              </div>
+              <div class="dice-face face-4">
+                <span class="pip" style="grid-area: 1 / 1"></span>
+                <span class="pip" style="grid-area: 1 / 3"></span>
+                <span class="pip" style="grid-area: 3 / 1"></span>
+                <span class="pip" style="grid-area: 3 / 3"></span>
+              </div>
+              <div class="dice-face face-5">
+                <span class="pip" style="grid-area: 1 / 1"></span>
+                <span class="pip" style="grid-area: 1 / 3"></span>
+                <span class="pip" style="grid-area: 2 / 2"></span>
+                <span class="pip" style="grid-area: 3 / 1"></span>
+                <span class="pip" style="grid-area: 3 / 3"></span>
+              </div>
+              <div class="dice-face face-6">
+                <span class="pip" style="grid-area: 1 / 1"></span>
+                <span class="pip" style="grid-area: 1 / 3"></span>
+                <span class="pip" style="grid-area: 2 / 1"></span>
+                <span class="pip" style="grid-area: 2 / 3"></span>
+                <span class="pip" style="grid-area: 3 / 1"></span>
+                <span class="pip" style="grid-area: 3 / 3"></span>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div class="skill-picker" id="tileCard" hidden>
+          <div class="skill-picker-card tile-card">
+            <p class="tile-card-icon" id="tileCardIcon" aria-hidden="true">⭐</p>
+            <h2 class="skill-picker-title" id="tileCardTitle">Power Up</h2>
+            <p class="skill-picker-sub" id="tileCardBlurb">Gain a star!</p>
+            <p class="tile-card-outcome" id="tileCardOutcome"></p>
+            <button type="button" class="btn btn-primary" id="tileCardOk">
+              Got it!
+            </button>
+          </div>
+        </div>
+
+        <div class="skill-picker" id="chanceOverlay" hidden>
+          <div class="chance-stage">
+            <div class="chance-card" id="chanceCard">
+              <div class="chance-card-inner" id="chanceCardInner">
+                <div class="chance-face chance-back">
+                  <span class="chance-q">?</span>
+                  <strong>Chance</strong>
+                </div>
+                <div class="chance-face chance-front">
+                  <p class="chance-badge">Chance</p>
+                  <h2 class="chance-title" id="chanceTitle">Card</h2>
+                  <p class="chance-text" id="chanceText">Do something fun!</p>
+                  <p class="chance-result" id="chanceResult" hidden></p>
+                  <div class="chance-score-row" id="chanceScoreRow" hidden>
+                    <p class="chance-score-label">Others: score it!</p>
+                    <div class="chance-scores" id="chanceScores"></div>
+                  </div>
+                  <div class="chance-choice-row" id="chanceChoiceRow" hidden>
+                    <button type="button" class="btn btn-primary" id="chanceYesBtn">
+                      Spend 2★
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="chanceNoBtn">
+                      No thanks
+                    </button>
+                  </div>
+                  <button type="button" class="btn btn-primary" id="chanceOk" hidden>
+                    Got it!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-picker" id="skillPicker" hidden>
+          <div class="skill-picker-card">
+            <h2 class="skill-picker-title" id="skillPickerTitle">Pick a skill</h2>
+            <p class="skill-picker-sub" id="skillPickerSub">Each skill can only be chosen once.</p>
+            <div class="skill-picker-grid" id="skillPickerGrid"></div>
+          </div>
+        </div>
+
+        <div class="skill-picker pet-picker" id="petPicker" hidden>
+          <div class="skill-picker-card skill-picker-card-wide">
+            <h2 class="skill-picker-title" id="petPickerTitle">Pick a pet friend</h2>
+            <p class="skill-picker-sub">Each pet can only be chosen once. Check their battle skill!</p>
+            <div class="skill-picker-grid pet-picker-grid" id="petPickerGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen screen-battle" id="battleScreen" hidden>
+        <h1 class="title">Boss Battle!</h1>
+        <p class="subtitle" id="battleIntro">Take turns. Attack or use a skill!</p>
+
+        <div class="monster-stage">
+          <img class="monster-image" id="monsterImage" alt="Castle monster" width="160" height="160" />
+          <p class="monster-name" id="monsterName">Castle Guardian</p>
+          <div class="hp-bar" aria-hidden="true">
+            <div class="hp-fill monster-hp" id="monsterHpFill"></div>
+          </div>
+          <p class="monster-need" id="monsterHpText">HP 20 / 20</p>
+        </div>
+
+        <div class="battle-party" id="battleParty"></div>
+        <p class="event" id="battleEvent" aria-live="polite">P1's turn!</p>
+        <div class="battle-actions" id="battleActions"></div>
+      </section>
+
+      <section class="screen" id="resultsScreen" hidden>
+        <h1 class="title" id="resultsTitle">You made it!</h1>
+        <div class="result-heroes" id="resultHeroes"></div>
+        <img class="result-hero" id="resultHero" alt="" width="140" height="140" hidden />
+        <p class="final-score" id="finalScore"></p>
+        <p class="subtitle" id="finalMessage"></p>
+        <button type="button" class="btn btn-primary" id="playAgainBtn">
+          Play Again
+        </button>
+        <button type="button" class="btn btn-secondary" id="changeHeroBtn">
+          New Game
+        </button>
+      </section>
+    </main>
+
+    <script src="../../shared/js/categories.js"></script>
+    <script src="js/game.js"></script>
+  </body>
+</html>
