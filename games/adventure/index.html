@@ -46,28 +46,18 @@
       <section class="screen screen-play" id="playScreen" hidden>
         <div class="play-stage">
           <div class="roster-row" id="rosterRow" aria-label="Players"></div>
-          <div class="board-wrap" id="boardWrap">
-            <div class="board" id="board"></div>
+          <div class="board-fit">
+            <div class="board-wrap" id="boardWrap">
+              <div class="board" id="board"></div>
+            </div>
           </div>
-        </div>
-
-        <div class="board-legend" aria-label="Tile key">
-          <div class="legend-item"><img src="../../assets/symbols/flag.png" alt="" /><span>Start</span></div>
-          <div class="legend-item"><img src="../../assets/symbols/star.png" alt="" /><span>Power Up</span></div>
-          <div class="legend-item"><img src="../../assets/symbols/potion.png" alt="" /><span>Skill</span></div>
-          <div class="legend-item"><img src="../../assets/symbols/paw.png" alt="" /><span>Friend</span></div>
-          <div class="legend-item"><span class="legend-q">?</span><span>Chance</span></div>
-          <div class="legend-item"><img src="../../assets/symbols/lightning.png" alt="" /><span>Oops</span></div>
-          <div class="legend-item"><img src="../../assets/symbols/moon.png" alt="" /><span>Rest</span></div>
-          <div class="legend-item"><img src="../../assets/symbols/castle.png" alt="" /><span>Castle</span></div>
         </div>
 
         <p class="event" id="eventText" aria-live="polite">
           Tap the dice to begin your adventure!
         </p>
 
-        <div class="adventure-actions">
-          <button type="button" class="dice-scene" id="rollBtn" aria-label="Roll the dice">
+        <button type="button" class="dice-scene" id="rollBtn" aria-label="Roll the dice">
             <div class="dice-cube" id="diceCube">
               <div class="dice-face face-1">
                 <span class="pip" style="grid-area: 2 / 2"></span>
@@ -104,7 +94,6 @@
               </div>
             </div>
           </button>
-        </div>
 
         <div class="skill-picker" id="tileCard" hidden>
           <div class="skill-picker-card tile-card">

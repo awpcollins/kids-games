@@ -786,6 +786,9 @@
         alt="Castle Quest"
       />
     `;
+    if (rollBtn) {
+      center.appendChild(rollBtn);
+    }
     board.appendChild(center);
 
     SPACES.forEach((space, index) => {

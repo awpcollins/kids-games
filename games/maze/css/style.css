@@ -427,6 +427,9 @@ body {
   border-radius: 14px;
   min-height: 2.4rem;
   font-family: inherit;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   font-size: 1.05rem;
   font-weight: 700;
   color: #2a2208;

@@ -643,6 +643,9 @@
     button.addEventListener("pointerup", up);
     button.addEventListener("pointerleave", up);
     button.addEventListener("pointercancel", up);
+    button.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+    });
   }
 
   bindHold(document.getElementById("moveForward"), "forward");
