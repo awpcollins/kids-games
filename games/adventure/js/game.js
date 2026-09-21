@@ -967,7 +967,6 @@
       return { next: "continue", outcome: "Back at the start!" };
     }
 
-    setEvent(`${player.label}'s turn continues!`);
     return { next: "continue", outcome: "" };
   }
 
@@ -1510,8 +1509,6 @@
   function advanceTurn() {
     currentIndex = (currentIndex + 1) % players.length;
     updateHud();
-    const player = currentPlayer();
-    setEvent(`${player.label}'s turn — ${player.hero.name}. Tap the dice!`);
     rollBtn.disabled = false;
     busy = false;
   }
@@ -1564,9 +1561,7 @@
     busy = true;
     rollBtn.disabled = true;
     const roll = 1 + Math.floor(Math.random() * 3);
-    setEvent(`${player.label} (${player.hero.name}) is rolling…`);
     await animateDiceRoll(roll);
-    setEvent(`${player.label} rolled a ${roll}!`);
     await sleep(250);
 
     for (let step = 0; step < roll; step += 1) {
@@ -1616,8 +1611,6 @@
     placeTokens();
     highlightPositions();
     updateHud();
-    const player = currentPlayer();
-    setEvent(`${player.label}'s turn — ${player.hero.name}. Tap the dice!`);
     showScreen(playScreen);
   }
 
