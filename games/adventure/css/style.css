@@ -1253,8 +1253,8 @@ body {
   left: 50%;
   top: 58%;
   z-index: 4;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   padding: 0;
   pointer-events: auto;
   transform: translate(-50%, -50%);
@@ -1521,8 +1521,8 @@ body {
   border: none;
   background: transparent;
   padding: 0;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   perspective: 420px;
   cursor: pointer;
   border-radius: 14px;
@@ -1550,7 +1550,7 @@ body {
 }
 
 .dice-cube {
-  --die: 56px;
+  --die: 48px;
   position: relative;
   width: var(--die);
   height: var(--die);
@@ -1558,6 +1558,40 @@ body {
   -webkit-transform-style: preserve-3d;
   transform: rotateX(-25deg) rotateY(35deg);
   transition: transform 0.45s ease;
+}
+
+.dice-core {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.dice-core span {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  border-radius: 0;
+}
+
+.dice-core span:nth-child(1) {
+  transform: rotateY(0deg) translateZ(calc(var(--die) / 2 - 1px));
+}
+.dice-core span:nth-child(2) {
+  transform: rotateY(90deg) translateZ(calc(var(--die) / 2 - 1px));
+}
+.dice-core span:nth-child(3) {
+  transform: rotateY(180deg) translateZ(calc(var(--die) / 2 - 1px));
+}
+.dice-core span:nth-child(4) {
+  transform: rotateY(-90deg) translateZ(calc(var(--die) / 2 - 1px));
+}
+.dice-core span:nth-child(5) {
+  transform: rotateX(90deg) translateZ(calc(var(--die) / 2 - 1px));
+}
+.dice-core span:nth-child(6) {
+  transform: rotateX(-90deg) translateZ(calc(var(--die) / 2 - 1px));
 }
 
 .dice-cube.is-rolling {
@@ -1568,20 +1602,20 @@ body {
 .dice-face {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #fffdf8, #f3e7cf);
-  border: 1px solid #c4ad86;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #e2d4b8;
+  border-radius: 8px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  padding: 6px;
+  padding: 5px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
 .dice-face .pip {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #2a2208;
   justify-self: center;
@@ -1590,22 +1624,22 @@ body {
 }
 
 .face-1 {
-  transform: rotateY(0deg) translateZ(calc(var(--die) / 2 + 1px)) scale(1.03);
+  transform: rotateY(0deg) translateZ(calc(var(--die) / 2 + 0.5px));
 }
 .face-2 {
-  transform: rotateY(90deg) translateZ(calc(var(--die) / 2 + 1px)) scale(1.03);
+  transform: rotateY(90deg) translateZ(calc(var(--die) / 2 + 0.5px));
 }
 .face-3 {
-  transform: rotateY(180deg) translateZ(calc(var(--die) / 2 + 1px)) scale(1.03);
+  transform: rotateY(180deg) translateZ(calc(var(--die) / 2 + 0.5px));
 }
 .face-4 {
-  transform: rotateY(-90deg) translateZ(calc(var(--die) / 2 + 1px)) scale(1.03);
+  transform: rotateY(-90deg) translateZ(calc(var(--die) / 2 + 0.5px));
 }
 .face-5 {
-  transform: rotateX(90deg) translateZ(calc(var(--die) / 2 + 1px)) scale(1.03);
+  transform: rotateX(90deg) translateZ(calc(var(--die) / 2 + 0.5px));
 }
 .face-6 {
-  transform: rotateX(-90deg) translateZ(calc(var(--die) / 2 + 1px)) scale(1.03);
+  transform: rotateX(-90deg) translateZ(calc(var(--die) / 2 + 0.5px));
 }
 
 @keyframes dice-tumble {
